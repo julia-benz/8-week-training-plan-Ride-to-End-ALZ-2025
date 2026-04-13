@@ -7,23 +7,30 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;0,900;1,400;1,600&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --cream: #fef9f0;
-    --warm-white: #fffdf8;
-    --butter: #f9e97e;
+    --cream: #eef6fb;
+    --warm-white: #f5fbff;
+    --butter: #fff176;
     --peach: #ffb347;
     --coral: #ff6b6b;
-    --rose: #e8678a;
-    --mint: #7bc8a4;
-    --sage: #a8c5a0;
-    --sky: #87ceeb;
-    --periwinkle: #8b9dc3;
-    --lavender: #c3b1e1;
-    --brown: #5c3d2e;
-    --dark: #2c1810;
-    --mid: #7a5c4f;
-    --light-border: rgba(92,61,46,0.15);
-    --shadow: 0 2px 12px rgba(92,61,46,0.12);
-    --shadow-lg: 0 8px 32px rgba(92,61,46,0.18);
+    --rose: #f06292;
+    --mint: #4caf82;
+    --sage: #81c784;
+    --sky: #4fc3f7;
+    --periwinkle: #7986cb;
+    --lavender: #ce93d8;
+    --violet: #9575cd;
+    --orange: #ff8c42;
+    --teal: #26c6da;
+    --green: #66bb6a;
+    --blue: #42a5f5;
+    --red: #ef5350;
+    --yellow: #ffee58;
+    --navy: #1a3a5c;
+    --dark: #1a3a5c;
+    --mid: #4a6fa5;
+    --light-border: rgba(26,58,92,0.12);
+    --shadow: 0 2px 12px rgba(26,58,92,0.10);
+    --shadow-lg: 0 8px 32px rgba(26,58,92,0.16);
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -34,12 +41,16 @@
     color: var(--dark);
     min-height: 100vh;
     padding-bottom: 40px;
+    background-image: radial-gradient(ellipse at top left, #d4eeff 0%, transparent 60%),
+                      radial-gradient(ellipse at bottom right, #d8f5e8 0%, transparent 60%);
   }
 
   /* HEADER */
   .header {
-    background: var(--brown);
-    padding: 20px 16px 16px;
+    background-image: url('mountain.jpg');
+    background-size: cover;
+    background-position: center 40%;
+    padding: 28px 16px 20px;
     text-align: center;
     position: relative;
     overflow: hidden;
@@ -48,31 +59,30 @@
     content: '';
     position: absolute;
     inset: 0;
-    background: repeating-linear-gradient(
-      45deg,
-      transparent,
-      transparent 10px,
-      rgba(255,255,255,0.03) 10px,
-      rgba(255,255,255,0.03) 20px
+    background: linear-gradient(
+      to bottom,
+      rgba(10, 30, 60, 0.55) 0%,
+      rgba(10, 30, 60, 0.45) 60%,
+      rgba(10, 30, 60, 0.65) 100%
     );
   }
   .header-title {
     font-family: 'Fraunces', serif;
     font-size: 28px;
     font-weight: 900;
-    color: var(--butter);
+    color: var(--yellow);
     line-height: 1.1;
     position: relative;
   }
   .header-sub {
     font-size: 13px;
-    color: rgba(249,233,126,0.7);
+    color: rgba(200,230,255,0.85);
     margin-top: 4px;
     position: relative;
   }
   .alz-badge {
     display: inline-block;
-    background: var(--coral);
+    background: var(--rose);
     color: white;
     font-size: 11px;
     font-weight: 600;
@@ -86,17 +96,17 @@
   /* QUOTE */
   .quote-card {
     margin: 14px 14px 0;
-    background: var(--butter);
+    background: linear-gradient(135deg, #e3f2fd, #e8f5e9);
     border-radius: 16px;
     padding: 14px 16px;
-    border: 2px solid var(--peach);
+    border: 2px solid #90caf9;
     position: relative;
   }
   .quote-text {
     font-family: 'Fraunces', serif;
     font-style: italic;
     font-size: 15px;
-    color: var(--brown);
+    color: var(--navy);
     line-height: 1.5;
   }
   .quote-author {
@@ -119,7 +129,7 @@
     background: white;
     border-radius: 16px;
     padding: 14px 16px;
-    border: 1.5px solid var(--light-border);
+    border: 1.5px solid #b3d9f7;
     box-shadow: var(--shadow);
   }
   .progress-label {
@@ -132,15 +142,15 @@
     font-family: 'Fraunces', serif;
     font-size: 14px;
     font-weight: 600;
-    color: var(--brown);
+    color: var(--navy);
   }
   .progress-label span:last-child {
     font-size: 13px;
     font-weight: 600;
-    color: var(--rose);
+    color: var(--violet);
   }
   .progress-bar {
-    background: var(--light-border);
+    background: #dceeff;
     border-radius: 20px;
     height: 14px;
     overflow: hidden;
@@ -148,7 +158,7 @@
   .progress-fill {
     height: 100%;
     border-radius: 20px;
-    background: linear-gradient(90deg, var(--mint), var(--sky), var(--rose));
+    background: linear-gradient(90deg, var(--green), var(--teal), var(--blue), var(--violet), var(--rose));
     transition: width 0.6s cubic-bezier(.34,1.56,.64,1);
     min-width: 0%;
   }
@@ -163,13 +173,13 @@
     border-radius: 10px;
     padding: 8px 6px;
     text-align: center;
-    border: 1px solid var(--light-border);
+    border: 1px solid #b3d9f7;
   }
   .stat-chip .val {
     font-family: 'Fraunces', serif;
     font-size: 20px;
     font-weight: 900;
-    color: var(--rose);
+    color: var(--periwinkle);
     display: block;
   }
   .stat-chip .lbl {
@@ -205,9 +215,9 @@
     position: relative;
   }
   .week-tab.active {
-    background: var(--brown);
-    color: var(--butter);
-    border-color: var(--brown);
+    background: var(--navy);
+    color: var(--yellow);
+    border-color: var(--navy);
   }
   .week-tab.done-badge::after {
     content: '✓';
@@ -248,7 +258,7 @@
     font-family: 'Fraunces', serif;
     font-size: 20px;
     font-weight: 900;
-    color: var(--brown);
+    color: var(--navy);
     line-height: 1.2;
   }
   .week-dates {
@@ -257,14 +267,14 @@
     margin-top: 2px;
   }
   .week-tip {
-    background: var(--lavender);
+    background: linear-gradient(135deg, #e8f5e9, #e3f2fd);
     border-radius: 12px;
     padding: 10px 13px;
     font-size: 13px;
     color: var(--dark);
     line-height: 1.5;
     margin-bottom: 10px;
-    border-left: 4px solid var(--periwinkle);
+    border-left: 4px solid var(--green);
   }
   .week-tip::before { content: '💡 '; }
 
@@ -281,7 +291,7 @@
     overflow: hidden;
   }
   .activity-card.completed {
-    border-color: var(--mint);
+    border-color: var(--green);
     background: #f0faf5;
   }
   .activity-card.completed::before {
@@ -291,11 +301,11 @@
     top: 0;
     bottom: 0;
     width: 4px;
-    background: var(--mint);
+    background: var(--green);
     border-radius: 4px 0 0 4px;
   }
   .activity-card.rest-card {
-    background: var(--cream);
+    background: #f0f7ff;
     border-style: dashed;
     box-shadow: none;
   }
@@ -318,11 +328,11 @@
     letter-spacing: 0.5px;
     text-transform: uppercase;
   }
-  .day-dot.ride-dot { background: var(--sky); color: #1a5f8a; }
-  .day-dot.climb-dot { background: var(--mint); color: #1a6645; }
-  .day-dot.lobo-dot { background: var(--butter); color: #7a5000; }
-  .day-dot.pilates-dot { background: var(--lavender); color: #4a2d8a; }
-  .day-dot.rest-dot { background: #f0ece8; color: var(--mid); }
+  .day-dot.ride-dot { background: #bbdefb; color: #0d47a1; }
+  .day-dot.climb-dot { background: #c8e6c9; color: #1b5e20; }
+  .day-dot.lobo-dot { background: #fff9c4; color: #f57f17; }
+  .day-dot.pilates-dot { background: #f3e5f5; color: #6a1b9a; }
+  .day-dot.rest-dot { background: #e3f2fd; color: #1565c0; }
   .day-dot.event-dot { background: var(--coral); color: white; }
   .day-dot .day-name { font-size: 14px; font-weight: 900; font-family: 'Fraunces', serif; line-height: 1; margin-bottom: 1px; }
   .card-content { flex: 1; min-width: 0; }
@@ -348,24 +358,24 @@
     letter-spacing: 0.3px;
     text-transform: uppercase;
   }
-  .badge-ride { background: #ddf0fc; color: #1a5f8a; }
-  .badge-climb { background: #d4f5e7; color: #1a6645; }
-  .badge-lobo { background: #fff3cc; color: #7a5000; }
-  .badge-pilates { background: #ede8f9; color: #4a2d8a; }
-  .badge-rest { background: #f0ece8; color: var(--mid); }
-  .badge-event { background: #ffe0e0; color: #c0392b; }
+  .badge-ride { background: #e3f2fd; color: #0d47a1; }
+  .badge-climb { background: #e8f5e9; color: #1b5e20; }
+  .badge-lobo { background: #fff9c4; color: #e65100; }
+  .badge-pilates { background: #f3e5f5; color: #6a1b9a; }
+  .badge-rest { background: #e3f2fd; color: #1565c0; }
+  .badge-event { background: #fce4ec; color: #880e4f; }
 
   .route-link {
     display: inline-flex;
     align-items: center;
     gap: 4px;
     font-size: 12px;
-    color: var(--periwinkle);
+    color: var(--blue);
     font-weight: 600;
     text-decoration: none;
     margin-top: 4px;
   }
-  .route-link:hover { color: var(--rose); }
+  .route-link:hover { color: var(--violet); }
 
   /* CHECKBOX */
   .check-row {
@@ -374,7 +384,7 @@
     gap: 10px;
     margin-top: 10px;
     padding-top: 10px;
-    border-top: 1px solid var(--light-border);
+    border-top: 1px solid #dceeff;
   }
   .check-label {
     display: flex;
@@ -387,12 +397,12 @@
     flex: 1;
     user-select: none;
   }
-  .check-label.checked { color: var(--mint); }
+  .check-label.checked { color: var(--green); }
   .custom-check {
     width: 26px;
     height: 26px;
     border-radius: 8px;
-    border: 2px solid var(--light-border);
+    border: 2px solid #b3d9f7;
     background: white;
     display: flex;
     align-items: center;
@@ -402,8 +412,8 @@
     font-size: 14px;
   }
   .custom-check.checked {
-    background: var(--mint);
-    border-color: var(--mint);
+    background: var(--green);
+    border-color: var(--green);
   }
 
   /* NOTES */
@@ -424,7 +434,7 @@
   .notes-area.open { display: block; }
   .notes-input {
     width: 100%;
-    border: 1.5px solid var(--light-border);
+    border: 1.5px solid #b3d9f7;
     border-radius: 10px;
     padding: 10px 12px;
     font-size: 13px;
@@ -436,10 +446,10 @@
     outline: none;
     transition: border-color 0.2s;
   }
-  .notes-input:focus { border-color: var(--periwinkle); }
+  .notes-input:focus { border-color: var(--blue); }
   .notes-saved {
     font-size: 11px;
-    color: var(--mint);
+    color: var(--green);
     margin-top: 4px;
     font-weight: 600;
   }
@@ -448,10 +458,10 @@
     color: var(--mid);
     font-style: italic;
     margin-top: 6px;
-    background: var(--cream);
+    background: #e8f5e9;
     border-radius: 8px;
     padding: 6px 10px;
-    border-left: 3px solid var(--lavender);
+    border-left: 3px solid var(--green);
   }
 
   /* STATS BADGE ON WEEK */
@@ -463,7 +473,7 @@
     font-family: 'Fraunces', serif;
     font-size: 22px;
     font-weight: 900;
-    color: var(--rose);
+    color: var(--coral);
     display: block;
   }
   .week-miles .unit {
@@ -555,7 +565,7 @@
     font-size: 12px;
     color: var(--mid);
   }
-  .footer a { color: var(--rose); text-decoration: none; font-weight: 600; }
+  .footer a { color: var(--blue); text-decoration: none; font-weight: 600; }
 </style>
 </head>
 <body>
@@ -573,7 +583,7 @@
 
 <div class="header">
   <div class="header-title">🌸 ALZ Ride Tracker</div>
-  <div class="header-sub">June 6 · CSU Fort Collins · 65 miles</div>
+  <div class="header-sub">June 6 · Fort Collins · 68 miles</div>
   <div class="alz-badge">Ride to End Alzheimer's 💜</div>
 </div>
 
@@ -601,11 +611,11 @@
 <div id="weekCards"></div>
 
 <div class="footer">
-    Made with 💜 for the Alzheimer's Association<br><br>
-    <a href="https://ridewithgps.com/routes/50960507" target="_blank">🗺️ View the 65-Mile Event Route</a>
-    &nbsp;&nbsp;·&nbsp;&nbsp;
-    <a href="https://act.alz.org/site/SPageServer?pagename=ride_homepage" target="_blank">💜 Ride to End ALZ Event Page</a>
-  </div>
+  Cashew thinks you should rest more. Cashew is wrong. 🐾<br><br>
+  <a href="https://ridewithgps.com/routes/50960507" target="_blank">🗺️ View the 68-Mile Event Route</a>
+  &nbsp;&nbsp;·&nbsp;&nbsp;
+  <a href="https://act.alz.org/site/SPageServer?pagename=ride_homepage" target="_blank">💜 Ride to End ALZ Event Page</a>
+</div>
 
 <script>
 const QUOTES = [
@@ -667,16 +677,16 @@ const weeks = [
   {
     id: 3, label: "Wk 3", dates: "Apr 28–May 4",
     title: "First long effort + intro to hills",
-    tip: "Friday is your first real climb — the Lyons out-and-back. It'll wake up different muscles than the flat greenway rides. Eat before you're hungry.",
-    miles: 50, elev: "~1,400 ft",
+    tip: "Friday is your first 2+ hour ride and your first taste of rolling terrain — Niwot has gentle hills that wake up different muscles than the flat greenway. Eat before you're hungry.",
+    miles: 50, elev: "~1,200 ft",
     days: [
       { id:"w3_mon", day:"Mon", type:"rest", act:"Rest" },
       { id:"w3_tue", day:"Tue", type:"pilates", act:"Pilates after work" },
       { id:"w3_wed", day:"Wed", type:"lobo", act:"LoBo one-way to Boulder for Survivor",
         meta:"~13 mi · Push a slightly brisker pace on the southern half" },
       { id:"w3_thu", day:"Thu", type:"rest", act:"Rest" },
-      { id:"w3_fri", day:"Fri", type:"ride", act:"Longmont → Lyons and back via Hwy 36",
-        meta:"~28 mi · ~900 ft gain · Wide shoulder, low morning traffic. Rolling terrain." },
+      { id:"w3_fri", day:"Fri", type:"ride", act:"Longmont → Niwot → Boulder Reservoir → back",
+        meta:"~28 mi · ~500 ft gain · Rolling terrain through Niwot — first taste of sustained effort beyond flat greenways" },
       { id:"w3_sat", day:"Sat", type:"rest", act:"Rest" },
       { id:"w3_sun", day:"Sun", type:"ride", act:"Easy recovery spin before pilates",
         meta:"~12 mi · Golden Ponds loop, flat and easy" },
@@ -685,16 +695,16 @@ const weeks = [
   {
     id: 4, label: "Wk 4", dates: "May 5–11",
     title: "Distance + rolling hills",
-    tip: "Your first 35-mile ride. Dial in your hydration — two full bottles minimum, plus something to eat every 45 min whether you're hungry or not.",
-    miles: 58, elev: "~1,600 ft",
+    tip: "Lyons again, but your legs are stronger now. This is deliberate — repeating a climb is one of the best ways to feel your fitness growing. Notice how it compares to Week 3.",
+    miles: 58, elev: "~1,800 ft",
     days: [
       { id:"w4_mon", day:"Mon", type:"rest", act:"Rest" },
       { id:"w4_tue", day:"Tue", type:"pilates", act:"Pilates after work" },
       { id:"w4_wed", day:"Wed", type:"lobo", act:"LoBo one-way to Boulder for Survivor",
         meta:"~13 mi · Use it as a benchmark — notice how effort compares to Week 1" },
       { id:"w4_thu", day:"Thu", type:"rest", act:"Rest" },
-      { id:"w4_fri", day:"Fri", type:"ride", act:"Longmont → Niwot → Boulder Reservoir → back",
-        meta:"~35 mi · ~900 ft gain · Rolling terrain through Niwot, some climbing around the reservoir" },
+      { id:"w4_fri", day:"Fri", type:"ride", act:"Longmont → Lyons and back via Hwy 36",
+        meta:"~28 mi · ~900 ft gain · Wide shoulder, low morning traffic. More hills than Week 3's flat loop — prepping your legs for Jamestown." },
       { id:"w4_sat", day:"Sat", type:"rest", act:"Rest" },
       { id:"w4_sun", day:"Sun", type:"ride", act:"Easy 60 min spin before pilates",
         meta:"~14 mi · Very easy active recovery on flat trail" },
@@ -761,7 +771,7 @@ const weeks = [
     id: 8, label: "🎉 Jun 6", dates: "Jun 2–6",
     title: "Event week — race day!!",
     tip: "No fitness to gain this week — only freshness to protect. Big carb dinner Friday, gear packed Saturday, early bed Saturday night.",
-    miles: 65, elev: "~2,281 ft",
+    miles: 68, elev: "~2,281 ft",
     isEvent: true,
     days: [
       { id:"w8_mon", day:"Mon", type:"rest", act:"Rest" },
@@ -776,7 +786,7 @@ const weeks = [
       { id:"w8_sat", day:"Sat", type:"rest", act:"Rest · explore Fort Collins · early bed",
         meta:"Carb-load at dinner. In bed by 9:30." },
       { id:"w8_sun", day:"Sun Jun 6", type:"event", act:"🎉 RIDE DAY — Ride to End ALZ",
-        meta:"65 mi · 2,281 ft gain · 7:15am start · CSU Canvas Stadium · 4 rest stops + SAG crews",
+        meta:"68 mi · 2,281 ft gain · 7:15am start · Canvas Stadium · Fort Collins · 4 rest stops + SAG crews",
         route:"https://ridewithgps.com/routes/50960507" },
     ]
   }
@@ -956,7 +966,7 @@ function buildUI() {
     if (w.isEvent) {
       inner += `<div class="event-banner">
         <span class="big">🎉 Race Day is June 6!</span>
-        <span class="small">CSU Canvas Stadium · Fort Collins · 7:15am start</span>
+        <span class="small">Canvas Stadium · Fort Collins · 7:15am start</span>
       </div>`;
     }
 
