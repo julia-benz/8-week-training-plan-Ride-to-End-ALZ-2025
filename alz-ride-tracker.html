@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>🌸 ALZ Ride Tracker — Julia</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;0,900;1,400;1,600&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #fef9f0;
+    --warm-white: #fffdf8;
+    --butter: #f9e97e;
+    --peach: #ffb347;
+    --coral: #ff6b6b;
+    --rose: #e8678a;
+    --mint: #7bc8a4;
+    --sage: #a8c5a0;
+    --sky: #87ceeb;
+    --periwinkle: #8b9dc3;
+    --lavender: #c3b1e1;
+    --brown: #5c3d2e;
+    --dark: #2c1810;
+    --mid: #7a5c4f;
+    --light-border: rgba(92,61,46,0.15);
+    --shadow: 0 2px 12px rgba(92,61,46,0.12);
+    --shadow-lg: 0 8px 32px rgba(92,61,46,0.18);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--dark);
+    min-height: 100vh;
+    padding-bottom: 40px;
+  }
+
+  /* HEADER */
+  .header {
+    background: var(--brown);
+    padding: 20px 16px 16px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 10px,
+      rgba(255,255,255,0.03) 10px,
+      rgba(255,255,255,0.03) 20px
+    );
+  }
+  .header-title {
+    font-family: 'Fraunces', serif;
+    font-size: 28px;
+    font-weight: 900;
+    color: var(--butter);
+    line-height: 1.1;
+    position: relative;
+  }
+  .header-sub {
+    font-size: 13px;
+    color: rgba(249,233,126,0.7);
+    margin-top: 4px;
+    position: relative;
+  }
+  .alz-badge {
+    display: inline-block;
+    background: var(--coral);
+    color: white;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-top: 8px;
+    letter-spacing: 0.5px;
+    position: relative;
+  }
+
+  /* QUOTE */
+  .quote-card {
+    margin: 14px 14px 0;
+    background: var(--butter);
+    border-radius: 16px;
+    padding: 14px 16px;
+    border: 2px solid var(--peach);
+    position: relative;
+  }
+  .quote-text {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 15px;
+    color: var(--brown);
+    line-height: 1.5;
+  }
+  .quote-author {
+    font-size: 12px;
+    color: var(--mid);
+    margin-top: 6px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+  }
+  .quote-icon {
+    position: absolute;
+    top: -8px;
+    left: 14px;
+    font-size: 20px;
+  }
+
+  /* PROGRESS BAR */
+  .progress-section {
+    margin: 14px 14px 0;
+    background: white;
+    border-radius: 16px;
+    padding: 14px 16px;
+    border: 1.5px solid var(--light-border);
+    box-shadow: var(--shadow);
+  }
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  .progress-label span:first-child {
+    font-family: 'Fraunces', serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--brown);
+  }
+  .progress-label span:last-child {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--rose);
+  }
+  .progress-bar {
+    background: var(--light-border);
+    border-radius: 20px;
+    height: 14px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    border-radius: 20px;
+    background: linear-gradient(90deg, var(--mint), var(--sky), var(--rose));
+    transition: width 0.6s cubic-bezier(.34,1.56,.64,1);
+    min-width: 0%;
+  }
+  .stats-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+  }
+  .stat-chip {
+    flex: 1;
+    background: var(--cream);
+    border-radius: 10px;
+    padding: 8px 6px;
+    text-align: center;
+    border: 1px solid var(--light-border);
+  }
+  .stat-chip .val {
+    font-family: 'Fraunces', serif;
+    font-size: 20px;
+    font-weight: 900;
+    color: var(--rose);
+    display: block;
+  }
+  .stat-chip .lbl {
+    font-size: 10px;
+    color: var(--mid);
+    font-weight: 500;
+    display: block;
+    margin-top: 1px;
+  }
+
+  /* WEEK TABS */
+  .week-tabs {
+    display: flex;
+    overflow-x: auto;
+    gap: 8px;
+    padding: 14px 14px 4px;
+    scrollbar-width: none;
+  }
+  .week-tabs::-webkit-scrollbar { display: none; }
+  .week-tab {
+    flex-shrink: 0;
+    padding: 7px 14px;
+    border-radius: 20px;
+    border: 2px solid var(--light-border);
+    background: white;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--mid);
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+    position: relative;
+  }
+  .week-tab.active {
+    background: var(--brown);
+    color: var(--butter);
+    border-color: var(--brown);
+  }
+  .week-tab.done-badge::after {
+    content: '✓';
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: var(--mint);
+    color: white;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    font-size: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .week-tab.event-tab {
+    border-color: var(--coral);
+    color: var(--coral);
+  }
+  .week-tab.event-tab.active {
+    background: var(--coral);
+    color: white;
+  }
+
+  /* WEEK CARD */
+  .week-card { display: none; padding: 0 14px; }
+  .week-card.visible { display: block; }
+
+  .week-header {
+    margin: 12px 0 10px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  .week-title {
+    font-family: 'Fraunces', serif;
+    font-size: 20px;
+    font-weight: 900;
+    color: var(--brown);
+    line-height: 1.2;
+  }
+  .week-dates {
+    font-size: 12px;
+    color: var(--mid);
+    margin-top: 2px;
+  }
+  .week-tip {
+    background: var(--lavender);
+    border-radius: 12px;
+    padding: 10px 13px;
+    font-size: 13px;
+    color: var(--dark);
+    line-height: 1.5;
+    margin-bottom: 10px;
+    border-left: 4px solid var(--periwinkle);
+  }
+  .week-tip::before { content: '💡 '; }
+
+  /* ACTIVITY CARDS */
+  .activity-card {
+    background: white;
+    border-radius: 16px;
+    border: 1.5px solid var(--light-border);
+    padding: 14px;
+    margin-bottom: 10px;
+    box-shadow: var(--shadow);
+    transition: all 0.25s;
+    position: relative;
+    overflow: hidden;
+  }
+  .activity-card.completed {
+    border-color: var(--mint);
+    background: #f0faf5;
+  }
+  .activity-card.completed::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: var(--mint);
+    border-radius: 4px 0 0 4px;
+  }
+  .activity-card.rest-card {
+    background: var(--cream);
+    border-style: dashed;
+    box-shadow: none;
+  }
+  .card-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .day-dot {
+    flex-shrink: 0;
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .day-dot.ride-dot { background: var(--sky); color: #1a5f8a; }
+  .day-dot.climb-dot { background: var(--mint); color: #1a6645; }
+  .day-dot.lobo-dot { background: var(--butter); color: #7a5000; }
+  .day-dot.pilates-dot { background: var(--lavender); color: #4a2d8a; }
+  .day-dot.rest-dot { background: #f0ece8; color: var(--mid); }
+  .day-dot.event-dot { background: var(--coral); color: white; }
+  .day-dot .day-name { font-size: 14px; font-weight: 900; font-family: 'Fraunces', serif; line-height: 1; margin-bottom: 1px; }
+  .card-content { flex: 1; min-width: 0; }
+  .act-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--dark);
+    line-height: 1.3;
+    margin-bottom: 3px;
+  }
+  .act-meta {
+    font-size: 12px;
+    color: var(--mid);
+    line-height: 1.4;
+  }
+  .type-badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 20px;
+    margin-bottom: 4px;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+  }
+  .badge-ride { background: #ddf0fc; color: #1a5f8a; }
+  .badge-climb { background: #d4f5e7; color: #1a6645; }
+  .badge-lobo { background: #fff3cc; color: #7a5000; }
+  .badge-pilates { background: #ede8f9; color: #4a2d8a; }
+  .badge-rest { background: #f0ece8; color: var(--mid); }
+  .badge-event { background: #ffe0e0; color: #c0392b; }
+
+  .route-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    color: var(--periwinkle);
+    font-weight: 600;
+    text-decoration: none;
+    margin-top: 4px;
+  }
+  .route-link:hover { color: var(--rose); }
+
+  /* CHECKBOX */
+  .check-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--light-border);
+  }
+  .check-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--mid);
+    flex: 1;
+    user-select: none;
+  }
+  .check-label.checked { color: var(--mint); }
+  .custom-check {
+    width: 26px;
+    height: 26px;
+    border-radius: 8px;
+    border: 2px solid var(--light-border);
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.2s;
+    font-size: 14px;
+  }
+  .custom-check.checked {
+    background: var(--mint);
+    border-color: var(--mint);
+  }
+
+  /* NOTES */
+  .notes-toggle {
+    background: none;
+    border: none;
+    font-size: 12px;
+    color: var(--periwinkle);
+    font-weight: 600;
+    cursor: pointer;
+    padding: 2px 0;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .notes-area {
+    display: none;
+    margin-top: 8px;
+  }
+  .notes-area.open { display: block; }
+  .notes-input {
+    width: 100%;
+    border: 1.5px solid var(--light-border);
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--dark);
+    background: var(--warm-white);
+    resize: none;
+    min-height: 70px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .notes-input:focus { border-color: var(--periwinkle); }
+  .notes-saved {
+    font-size: 11px;
+    color: var(--mint);
+    margin-top: 4px;
+    font-weight: 600;
+  }
+  .notes-preview {
+    font-size: 12px;
+    color: var(--mid);
+    font-style: italic;
+    margin-top: 6px;
+    background: var(--cream);
+    border-radius: 8px;
+    padding: 6px 10px;
+    border-left: 3px solid var(--lavender);
+  }
+
+  /* STATS BADGE ON WEEK */
+  .week-miles {
+    text-align: right;
+    flex-shrink: 0;
+  }
+  .week-miles .num {
+    font-family: 'Fraunces', serif;
+    font-size: 22px;
+    font-weight: 900;
+    color: var(--rose);
+    display: block;
+  }
+  .week-miles .unit {
+    font-size: 11px;
+    color: var(--mid);
+    font-weight: 500;
+  }
+
+  /* CONFETTI CANVAS */
+  #confetti-canvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* CELEBRATION MODAL */
+  .celebrate-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    align-items: center;
+    justify-content: center;
+    background: rgba(44,24,16,0.5);
+    backdrop-filter: blur(4px);
+  }
+  .celebrate-modal.show { display: flex; }
+  .celebrate-inner {
+    background: white;
+    border-radius: 28px;
+    padding: 32px 28px;
+    text-align: center;
+    max-width: 300px;
+    margin: 20px;
+    border: 3px solid var(--butter);
+    animation: popIn 0.4s cubic-bezier(.34,1.56,.64,1);
+  }
+  @keyframes popIn {
+    from { transform: scale(0.5); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+  .celebrate-emoji { font-size: 56px; margin-bottom: 8px; }
+  .celebrate-text {
+    font-family: 'Fraunces', serif;
+    font-size: 24px;
+    font-weight: 900;
+    color: var(--brown);
+    line-height: 1.2;
+    margin-bottom: 8px;
+  }
+  .celebrate-sub {
+    font-size: 14px;
+    color: var(--mid);
+    margin-bottom: 20px;
+    line-height: 1.5;
+  }
+  .celebrate-btn {
+    background: var(--brown);
+    color: var(--butter);
+    border: none;
+    border-radius: 50px;
+    padding: 13px 32px;
+    font-size: 15px;
+    font-weight: 700;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    width: 100%;
+    transition: transform 0.1s;
+  }
+  .celebrate-btn:active { transform: scale(0.97); }
+
+  /* EVENT WEEK SPECIAL */
+  .event-banner {
+    background: linear-gradient(135deg, var(--coral), var(--rose));
+    border-radius: 16px;
+    padding: 16px;
+    text-align: center;
+    margin-bottom: 10px;
+    color: white;
+  }
+  .event-banner .big { font-family: 'Fraunces', serif; font-size: 22px; font-weight: 900; display: block; }
+  .event-banner .small { font-size: 13px; opacity: 0.9; margin-top: 4px; display: block; }
+
+  .footer {
+    text-align: center;
+    padding: 24px 14px 10px;
+    font-size: 12px;
+    color: var(--mid);
+  }
+  .footer a { color: var(--rose); text-decoration: none; font-weight: 600; }
+</style>
+</head>
+<body>
+
+<canvas id="confetti-canvas"></canvas>
+
+<div class="celebrate-modal" id="celebrateModal">
+  <div class="celebrate-inner">
+    <div class="celebrate-emoji" id="celebrateEmoji">🐶</div>
+    <div class="celebrate-text">Muffin says amazing job!</div>
+    <div class="celebrate-sub" id="celebrateSub">You absolutely crushed it. Keep going, you're unstoppable! 🌸</div>
+    <button class="celebrate-btn" onclick="closeCelebrate()">Thanks Muffin!! 🧁</button>
+  </div>
+</div>
+
+<div class="header">
+  <div class="header-title">🌸 ALZ Ride Tracker</div>
+  <div class="header-sub">June 6 · CSU Fort Collins · 65 miles</div>
+  <div class="alz-badge">Ride to End Alzheimer's 💜</div>
+</div>
+
+<div class="quote-card" id="quoteCard">
+  <span class="quote-icon">🚲</span>
+  <div class="quote-text" id="quoteText">Loading today's inspiration...</div>
+  <div class="quote-author" id="quoteAuthor"></div>
+</div>
+
+<div class="progress-section">
+  <div class="progress-label">
+    <span>Overall Progress</span>
+    <span id="progressPct">0%</span>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+  <div class="stats-row">
+    <div class="stat-chip"><span class="val" id="statDone">0</span><span class="lbl">completed</span></div>
+    <div class="stat-chip"><span class="val" id="statTotal">0</span><span class="lbl">total sessions</span></div>
+    <div class="stat-chip"><span class="val" id="statWeeks">0</span><span class="lbl">weeks done</span></div>
+    <div class="stat-chip"><span class="val" id="statStreak">0</span><span class="lbl">days to go</span></div>
+  </div>
+</div>
+
+<div class="week-tabs" id="weekTabs"></div>
+<div id="weekCards"></div>
+
+<div class="footer">
+  Made with 💜 for the Alzheimer's Association<br>
+  <a href="https://act.alz.org/site/TR?pg=informational&fr_id=19316&type=fr_informational&sid=25340" target="_blank">Event Info & Routes</a>
+</div>
+
+<script>
+const QUOTES = [
+  { text: "It never gets easier, you just go faster.", author: "— Greg LeMond" },
+  { text: "Cycling is a sport of the open road and therefore must obey its laws.", author: "— Bobet" },
+  { text: "The bicycle is a curious vehicle. Its passenger is its engine.", author: "— John Howard" },
+  { text: "Pain is temporary. Quitting lasts forever.", author: "— Lance Armstrong" },
+  { text: "Give a man a fish and feed him for a day. Teach a man to ride a bike and he will realize fishing is stupid.", author: "— Desmond Tutu" },
+  { text: "The bicycle is the most civilized conveyance known to man. Other forms of transport grow daily more nightmarish. Only the bicycle remains pure in heart.", author: "— Iris Murdoch" },
+  { text: "Get a bicycle. You will not regret it, if you live.", author: "— Mark Twain" },
+  { text: "Every time I see an adult on a bicycle, I no longer despair for the future of the human race.", author: "— H.G. Wells" },
+  { text: "I thought of that while riding my bicycle.", author: "— Albert Einstein, on the Theory of Relativity" },
+  { text: "It is the unknown around the corner that turns my wheels.", author: "— Heinz Stücke" },
+  { text: "When I see an adult on a bicycle, I do not despair for the future of the human race.", author: "— H.G. Wells" },
+  { text: "Life is like riding a bicycle. To keep your balance, you must keep moving.", author: "— Albert Einstein" },
+  { text: "Nothing compares to the simple pleasure of riding a bike.", author: "— John F. Kennedy" },
+  { text: "Melancholy is incompatible with bicycling.", author: "— James E. Starrs" },
+  { text: "A bicycle does get you there and more. And there is always the thin edge of danger to keep you alert and aloft.", author: "— Edward Abbey" },
+];
+
+const weeks = [
+  {
+    id: 1, label: "Wk 1", dates: "Apr 14–20",
+    title: "Base building — flat miles",
+    tip: "Keep effort fully conversational — if you can't hold a sentence, slow down. Just get comfortable in the saddle and learn your trails.",
+    miles: 28, elev: "~500 ft",
+    days: [
+      { id:"w1_mon", day:"Mon", type:"rest", act:"Rest", note:"" },
+      { id:"w1_tue", day:"Tue", type:"pilates", act:"Pilates after work", note:"" },
+      { id:"w1_wed", day:"Wed", type:"lobo", act:"LoBo one-way to Boulder for Survivor",
+        meta:"~13 mi · Left Hand Greenway → LoBo through Niwot → Boulder. Catch ride home." },
+      { id:"w1_thu", day:"Thu", type:"rest", act:"Rest", note:"" },
+      { id:"w1_fri", day:"Fri", type:"ride", act:"St. Vrain + Left Hand Greenway loop",
+        meta:"~14 mi · Golden Ponds east to Sandstone Ranch, back via Left Hand Greenway",
+        route:"https://ridewithgps.com/routes/50960507" },
+      { id:"w1_sat", day:"Sat", type:"rest", act:"Rest", note:"" },
+      { id:"w1_sun", day:"Sun", type:"ride", act:"Easy spin before pilates",
+        meta:"~10 mi · McIntosh Lake loop or Golden Ponds out-and-back · home by 11:30am" },
+    ]
+  },
+  {
+    id: 2, label: "Wk 2", dates: "Apr 21–27",
+    title: "Building cadence — still flat",
+    tip: "Slightly longer Friday. The LoBo has crushed gravel sections — good prep for variable surfaces. Start thinking about your nutrition strategy.",
+    miles: 36, elev: "~700 ft",
+    days: [
+      { id:"w2_mon", day:"Mon", type:"rest", act:"Rest" },
+      { id:"w2_tue", day:"Tue", type:"pilates", act:"Pilates after work" },
+      { id:"w2_wed", day:"Wed", type:"lobo", act:"LoBo one-way to Boulder for Survivor",
+        meta:"~13 mi · Same route — start noticing if it feels easier than Week 1" },
+      { id:"w2_thu", day:"Thu", type:"rest", act:"Rest" },
+      { id:"w2_fri", day:"Fri", type:"ride", act:"Dry Creek + Left Hand + LoBo out-and-back",
+        meta:"~18 mi · West on Dry Creek Greenway, connect to Left Hand, out a few miles on LoBo and back" },
+      { id:"w2_sat", day:"Sat", type:"rest", act:"Rest" },
+      { id:"w2_sun", day:"Sun", type:"ride", act:"St. Vrain end-to-end before pilates",
+        meta:"~16 mi · Golden Ponds → Sandstone Ranch and back · home by 11:30am" },
+    ]
+  },
+  {
+    id: 3, label: "Wk 3", dates: "Apr 28–May 4",
+    title: "First long effort + intro to hills",
+    tip: "Friday is your first real climb — the Lyons out-and-back. It'll wake up different muscles than the flat greenway rides. Eat before you're hungry.",
+    miles: 50, elev: "~1,400 ft",
+    days: [
+      { id:"w3_mon", day:"Mon", type:"rest", act:"Rest" },
+      { id:"w3_tue", day:"Tue", type:"pilates", act:"Pilates after work" },
+      { id:"w3_wed", day:"Wed", type:"lobo", act:"LoBo one-way to Boulder for Survivor",
+        meta:"~13 mi · Push a slightly brisker pace on the southern half" },
+      { id:"w3_thu", day:"Thu", type:"rest", act:"Rest" },
+      { id:"w3_fri", day:"Fri", type:"ride", act:"Longmont → Lyons and back via Hwy 36",
+        meta:"~28 mi · ~900 ft gain · Wide shoulder, low morning traffic. Rolling terrain." },
+      { id:"w3_sat", day:"Sat", type:"rest", act:"Rest" },
+      { id:"w3_sun", day:"Sun", type:"ride", act:"Easy recovery spin before pilates",
+        meta:"~12 mi · Golden Ponds loop, flat and easy" },
+    ]
+  },
+  {
+    id: 4, label: "Wk 4", dates: "May 5–11",
+    title: "Distance + rolling hills",
+    tip: "Your first 35-mile ride. Dial in your hydration — two full bottles minimum, plus something to eat every 45 min whether you're hungry or not.",
+    miles: 58, elev: "~1,600 ft",
+    days: [
+      { id:"w4_mon", day:"Mon", type:"rest", act:"Rest" },
+      { id:"w4_tue", day:"Tue", type:"pilates", act:"Pilates after work" },
+      { id:"w4_wed", day:"Wed", type:"lobo", act:"LoBo one-way to Boulder for Survivor",
+        meta:"~13 mi · Use it as a benchmark — notice how effort compares to Week 1" },
+      { id:"w4_thu", day:"Thu", type:"rest", act:"Rest" },
+      { id:"w4_fri", day:"Fri", type:"ride", act:"Longmont → Niwot → Boulder Reservoir → back",
+        meta:"~35 mi · ~900 ft gain · Rolling terrain through Niwot, some climbing around the reservoir" },
+      { id:"w4_sat", day:"Sat", type:"rest", act:"Rest" },
+      { id:"w4_sun", day:"Sun", type:"ride", act:"Easy 60 min spin before pilates",
+        meta:"~14 mi · Very easy active recovery on flat trail" },
+    ]
+  },
+  {
+    id: 5, label: "Wk 5", dates: "May 12–18",
+    title: "First Jamestown climb 🏔️",
+    tip: "Big week! The Jamestown ride is your first real canyon climb — ~2,000 ft over ~20 miles of climbing. Take it steady, shift down early, stop at the Jamestown Mercantile. Saturday is active recovery only.",
+    miles: 72, elev: "~4,200 ft",
+    days: [
+      { id:"w5_mon", day:"Mon", type:"rest", act:"Rest" },
+      { id:"w5_tue", day:"Tue", type:"pilates", act:"Pilates after work" },
+      { id:"w5_wed", day:"Wed", type:"lobo", act:"LoBo one-way to Boulder for Survivor",
+        meta:"~13 mi · Treat as mid-week tempo — strong, confident pace" },
+      { id:"w5_thu", day:"Thu", type:"rest", act:"Rest — eat well, sleep well" },
+      { id:"w5_fri", day:"Fri", type:"climb", act:"Longmont → Left Hand Canyon → Jamestown and back",
+        meta:"~39 mi · ~2,200 ft gain · Left Hand Canyon Dr → James Canyon Dr → Jamestown Mercantile turnaround",
+        route:"https://ridewithgps.com/routes/566276" },
+      { id:"w5_sat", day:"Sat", type:"ride", act:"Active recovery — flat trail spin",
+        meta:"~20 mi · St. Vrain Greenway, easy pace only" },
+      { id:"w5_sun", day:"Sun", type:"pilates", act:"Pilates 12:30pm — no ride",
+        meta:"Let legs recover from the canyon" },
+    ]
+  },
+  {
+    id: 6, label: "Wk 6", dates: "May 19–25",
+    title: "Second Jamestown — go stronger 🏔️🏔️",
+    tip: "Same route as Week 5 but now you know it. Aim to feel smoother — more confident gear shifting, better breathing. This is your last big training week.",
+    miles: 65, elev: "~3,500 ft",
+    days: [
+      { id:"w6_mon", day:"Mon", type:"rest", act:"Rest" },
+      { id:"w6_tue", day:"Tue", type:"pilates", act:"Pilates after work" },
+      { id:"w6_wed", day:"Wed", type:"lobo", act:"LoBo one-way to Boulder for Survivor",
+        meta:"~13 mi · Enjoy it — last big Wednesday ride" },
+      { id:"w6_thu", day:"Thu", type:"rest", act:"Rest" },
+      { id:"w6_fri", day:"Fri", type:"climb", act:"Longmont → Left Hand Canyon → Jamestown and back",
+        meta:"~39 mi · ~2,200 ft gain · Same route as Week 5. Aim to feel stronger and more relaxed.",
+        route:"https://ridewithgps.com/routes/566276" },
+      { id:"w6_sat", day:"Sat", type:"rest", act:"Rest" },
+      { id:"w6_sun", day:"Sun", type:"ride", act:"Easy trail spin before pilates",
+        meta:"~14 mi · St. Vrain flat, easy pace only" },
+    ]
+  },
+  {
+    id: 7, label: "Wk 7", dates: "May 26–Jun 1",
+    title: "Taper — stay sharp",
+    tip: "Cut volume ~35% but keep the snap in your legs. Don't go slow — just go shorter. Your body needs to feel primed, not dusty.",
+    miles: 45, elev: "~1,800 ft",
+    days: [
+      { id:"w7_mon", day:"Mon", type:"rest", act:"Rest" },
+      { id:"w7_tue", day:"Tue", type:"pilates", act:"Pilates after work" },
+      { id:"w7_wed", day:"Wed", type:"lobo", act:"LoBo one-way to Boulder for Survivor",
+        meta:"~13 mi · Keep the Wednesday tradition — ride it at a confident pace" },
+      { id:"w7_thu", day:"Thu", type:"rest", act:"Rest" },
+      { id:"w7_fri", day:"Fri", type:"ride", act:"Niwot loop via LoBo — solid effort, shorter day",
+        meta:"~30 mi · ~900 ft gain · Longmont → LoBo south through Niwot → Boulder Reservoir → back" },
+      { id:"w7_sat", day:"Sat", type:"rest", act:"Rest" },
+      { id:"w7_sun", day:"Sun", type:"ride", act:"Easy spin before pilates",
+        meta:"~12 mi · Flat trail, easy pace. Home by 11:30am." },
+    ]
+  },
+  {
+    id: 8, label: "🎉 Jun 6", dates: "Jun 2–6",
+    title: "Event week — race day!!",
+    tip: "No fitness to gain this week — only freshness to protect. Big carb dinner Friday, gear packed Saturday, early bed Saturday night.",
+    miles: 65, elev: "~2,281 ft",
+    isEvent: true,
+    days: [
+      { id:"w8_mon", day:"Mon", type:"rest", act:"Rest" },
+      { id:"w8_tue", day:"Tue", type:"pilates", act:"Pilates after work",
+        meta:"Skip the harder movements if legs feel tired" },
+      { id:"w8_wed", day:"Wed", type:"ride", act:"Easy 30 min spin — skip the LoBo",
+        meta:"~8 mi · Just move your legs." },
+      { id:"w8_thu", day:"Thu", type:"rest", act:"Rest — prep your kit",
+        meta:"Charge lights, check tire pressure, pack food + kit" },
+      { id:"w8_fri", day:"Fri", type:"rest", act:"Drive to Fort Collins",
+        meta:"7:15am start at CSU Canvas Stadium — staying over Friday strongly recommended" },
+      { id:"w8_sat", day:"Sat", type:"rest", act:"Rest · explore Fort Collins · early bed",
+        meta:"Carb-load at dinner. In bed by 9:30." },
+      { id:"w8_sun", day:"Sun Jun 6", type:"event", act:"🎉 RIDE DAY — Ride to End ALZ",
+        meta:"65 mi · 2,281 ft gain · 7:15am start · CSU Canvas Stadium · 4 rest stops + SAG crews",
+        route:"https://ridewithgps.com/routes/50960507" },
+    ]
+  }
+];
+
+const CELEBRATE_MSGS = [
+  { emoji:"🐶", sub:"Muffin is SO proud of you right now. Extra treats for everyone!" },
+  { emoji:"🧁", sub:"That ride was as sweet as a freshly baked muffin. You're incredible!" },
+  { emoji:"☀️", sub:"You're shining brighter than a Colorado summer day. Keep it up!" },
+  { emoji:"🐶💨", sub:"Muffin did zoomies to celebrate your ride. You earned every mile!" },
+  { emoji:"🌸", sub:"Spring energy unlocked. Muffin approves. You're doing amazing!" },
+  { emoji:"🏆", sub:"Champion behavior detected. Muffin has officially claimed you as her hero." },
+  { emoji:"🎊", sub:"Muffin couldn't stop wagging. You absolutely killed it out there!" },
+];
+
+let state = JSON.parse(localStorage.getItem('alz-tracker-v2') || '{}');
+
+function save() {
+  localStorage.setItem('alz-tracker-v2', JSON.stringify(state));
+}
+
+function setQuote() {
+  const day = new Date().getDay();
+  const q = QUOTES[day % QUOTES.length];
+  document.getElementById('quoteText').textContent = '"' + q.text + '"';
+  document.getElementById('quoteAuthor').textContent = q.author;
+}
+
+const TYPE_COLORS = {
+  ride: 'ride-dot', climb: 'climb-dot', lobo: 'lobo-dot',
+  pilates: 'pilates-dot', rest: 'rest-dot', event: 'event-dot'
+};
+const TYPE_BADGES = {
+  ride: 'badge-ride', climb: 'badge-climb', lobo: 'badge-lobo',
+  pilates: 'badge-pilates', rest: 'badge-rest', event: 'badge-event'
+};
+const TYPE_LABELS = {
+  ride: 'Ride', climb: 'Climb', lobo: 'LoBo', pilates: 'Pilates', rest: 'Rest', event: '🎉 Event'
+};
+
+function isTrackable(type) {
+  return type !== 'rest';
+}
+
+function updateStats() {
+  let total = 0, done = 0;
+  weeks.forEach(w => {
+    w.days.forEach(d => {
+      if (isTrackable(d.type)) {
+        total++;
+        if (state[d.id]?.done) done++;
+      }
+    });
+  });
+  const pct = total > 0 ? Math.round((done/total)*100) : 0;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressPct').textContent = pct + '%';
+  document.getElementById('statDone').textContent = done;
+  document.getElementById('statTotal').textContent = total;
+
+  const completedWeeks = weeks.filter(w =>
+    w.days.every(d => !isTrackable(d.type) || state[d.id]?.done)
+  ).length;
+  document.getElementById('statWeeks').textContent = completedWeeks;
+
+  const today = new Date();
+  const event = new Date('2026-06-06');
+  const diff = Math.max(0, Math.ceil((event - today) / (1000*60*60*24)));
+  document.getElementById('statStreak').textContent = diff;
+
+  // Update week tab badges
+  weeks.forEach(w => {
+    const tab = document.getElementById('tab-' + w.id);
+    if (!tab) return;
+    const allDone = w.days.every(d => !isTrackable(d.type) || state[d.id]?.done);
+    tab.classList.toggle('done-badge', allDone);
+  });
+}
+
+function toggleDone(id, type) {
+  if (!state[id]) state[id] = {};
+  const wasDone = state[id].done;
+  state[id].done = !wasDone;
+  save();
+
+  const card = document.getElementById('card-' + id);
+  const check = card.querySelector('.custom-check');
+  const label = card.querySelector('.check-label');
+
+  card.classList.toggle('completed', state[id].done);
+  check.classList.toggle('checked', state[id].done);
+  check.textContent = state[id].done ? '✓' : '';
+  label.classList.toggle('checked', state[id].done);
+  label.textContent = '';
+  label.prepend(check);
+  label.append(state[id].done ? ' Completed!' : ' Mark as done');
+
+  updateStats();
+
+  if (state[id].done && isTrackable(type) && type !== 'rest') {
+    setTimeout(() => showCelebrate(type), 200);
+  }
+}
+
+function showCelebrate(type) {
+  const msg = CELEBRATE_MSGS[Math.floor(Math.random() * CELEBRATE_MSGS.length)];
+  document.getElementById('celebrateEmoji').textContent = msg.emoji;
+  document.getElementById('celebrateSub').textContent = msg.sub;
+  document.getElementById('celebrateModal').classList.add('show');
+  launchConfetti();
+}
+
+function closeCelebrate() {
+  document.getElementById('celebrateModal').classList.remove('show');
+}
+
+function saveNote(id) {
+  const ta = document.getElementById('notes-' + id);
+  if (!state[id]) state[id] = {};
+  state[id].note = ta.value;
+  save();
+  const saved = document.getElementById('saved-' + id);
+  const preview = document.getElementById('preview-' + id);
+  saved.style.display = 'block';
+  setTimeout(() => saved.style.display = 'none', 1500);
+  if (preview) {
+    preview.textContent = ta.value ? '📝 ' + ta.value.slice(0,80) + (ta.value.length > 80 ? '...' : '') : '';
+    preview.style.display = ta.value ? 'block' : 'none';
+  }
+}
+
+function toggleNotes(id) {
+  const area = document.getElementById('notesarea-' + id);
+  area.classList.toggle('open');
+  if (area.classList.contains('open')) {
+    document.getElementById('notes-' + id).focus();
+  }
+}
+
+function buildUI() {
+  const tabsEl = document.getElementById('weekTabs');
+  const cardsEl = document.getElementById('weekCards');
+
+  weeks.forEach((w, wi) => {
+    // Tab
+    const tab = document.createElement('button');
+    tab.className = 'week-tab' + (wi === 0 ? ' active' : '') + (w.isEvent ? ' event-tab' : '');
+    tab.id = 'tab-' + w.id;
+    tab.textContent = w.label;
+    tab.onclick = () => {
+      document.querySelectorAll('.week-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.week-card').forEach(c => c.classList.remove('visible'));
+      tab.classList.add('active');
+      document.getElementById('weekcard-' + w.id).classList.add('visible');
+    };
+    tabsEl.appendChild(tab);
+
+    // Card
+    const wc = document.createElement('div');
+    wc.className = 'week-card' + (wi === 0 ? ' visible' : '');
+    wc.id = 'weekcard-' + w.id;
+
+    let inner = `
+      <div class="week-header">
+        <div>
+          <div class="week-title">${w.title}</div>
+          <div class="week-dates">${w.dates}</div>
+        </div>
+        <div class="week-miles">
+          <span class="num">${w.miles}</span>
+          <span class="unit">mi · ${w.elev}</span>
+        </div>
+      </div>
+      <div class="week-tip">${w.tip}</div>
+    `;
+
+    if (w.isEvent) {
+      inner += `<div class="event-banner">
+        <span class="big">🎉 Race Day is June 6!</span>
+        <span class="small">CSU Canvas Stadium · Fort Collins · 7:15am start</span>
+      </div>`;
+    }
+
+    w.days.forEach(d => {
+      const isDone = state[d.id]?.done || false;
+      const savedNote = state[d.id]?.note || '';
+      const trackable = isTrackable(d.type);
+      const dotClass = TYPE_COLORS[d.type] || 'rest-dot';
+      const badgeClass = TYPE_BADGES[d.type] || 'badge-rest';
+      const typeLabel = TYPE_LABELS[d.type] || d.type;
+      const isRestCard = d.type === 'rest';
+
+      inner += `<div class="activity-card ${isDone ? 'completed' : ''} ${isRestCard ? 'rest-card' : ''}" id="card-${d.id}">
+        <div class="card-top">
+          <div class="day-dot ${dotClass}">
+            <span class="day-name">${d.day.split(' ')[0]}</span>
+            <span>${typeLabel}</span>
+          </div>
+          <div class="card-content">
+            <span class="type-badge ${badgeClass}">${typeLabel}</span>
+            <div class="act-name">${d.act}</div>
+            ${d.meta ? `<div class="act-meta">${d.meta}</div>` : ''}
+            ${d.route ? `<a class="route-link" href="${d.route}" target="_blank">🗺️ View Route</a>` : ''}
+          </div>
+        </div>`;
+
+      if (trackable) {
+        inner += `<div class="check-row">
+          <label class="check-label ${isDone ? 'checked' : ''}" onclick="toggleDone('${d.id}','${d.type}'); return false;">
+            <div class="custom-check ${isDone ? 'checked' : ''}">${isDone ? '✓' : ''}</div>
+            ${isDone ? ' Completed!' : ' Mark as done'}
+          </label>
+          <button class="notes-toggle" onclick="toggleNotes('${d.id}')">📝 Notes</button>
+        </div>
+        <div class="notes-area ${savedNote ? 'open' : ''}" id="notesarea-${d.id}">
+          <textarea class="notes-input" id="notes-${d.id}" placeholder="How did it feel? Any notes..." oninput="saveNote('${d.id}')">${savedNote}</textarea>
+          <div class="notes-saved" id="saved-${d.id}" style="display:none">✓ Saved</div>
+        </div>
+        ${savedNote && !savedNote ? '' : ''}
+        ${savedNote ? `<div class="notes-preview" id="preview-${d.id}">📝 ${savedNote.slice(0,80)}${savedNote.length>80?'...':''}</div>` : `<div class="notes-preview" id="preview-${d.id}" style="display:none"></div>`}
+        `;
+      }
+
+      inner += `</div>`;
+    });
+
+    wc.innerHTML = inner;
+    cardsEl.appendChild(wc);
+  });
+}
+
+// CONFETTI
+function launchConfetti() {
+  const canvas = document.getElementById('confetti-canvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  const SHAPES = ['☀️','🐶','🧁','🌸','🎊','✨','🌈','🎀'];
+  const particles = [];
+
+  for (let i = 0; i < 80; i++) {
+    particles.push({
+      x: Math.random() * canvas.width,
+      y: -20 - Math.random() * 200,
+      vx: (Math.random() - 0.5) * 3,
+      vy: 2 + Math.random() * 3,
+      shape: SHAPES[Math.floor(Math.random() * SHAPES.length)],
+      size: 16 + Math.random() * 18,
+      spin: (Math.random() - 0.5) * 0.2,
+      angle: Math.random() * Math.PI * 2,
+      life: 1,
+      decay: 0.008 + Math.random() * 0.005
+    });
+  }
+
+  let frame;
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    let alive = false;
+    particles.forEach(p => {
+      if (p.life <= 0) return;
+      alive = true;
+      p.x += p.vx;
+      p.y += p.vy;
+      p.angle += p.spin;
+      p.life -= p.decay;
+      ctx.save();
+      ctx.globalAlpha = Math.max(0, p.life);
+      ctx.font = p.size + 'px serif';
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.angle);
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(p.shape, 0, 0);
+      ctx.restore();
+    });
+    if (alive) frame = requestAnimationFrame(draw);
+    else ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
+  if (frame) cancelAnimationFrame(frame);
+  draw();
+}
+
+// INIT
+setQuote();
+buildUI();
+updateStats();
+</script>
+</body>
+</html>
