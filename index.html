@@ -154,13 +154,19 @@
     border-radius: 20px;
     height: 14px;
     overflow: hidden;
+    display: flex;
   }
   .progress-fill {
     height: 100%;
-    border-radius: 20px;
+    border-radius: 20px 0 0 20px;
     background: linear-gradient(90deg, var(--green), var(--teal), var(--blue), var(--violet), var(--rose));
     transition: width 0.6s cubic-bezier(.34,1.56,.64,1);
-    min-width: 0%;
+  }
+  .progress-extra {
+    height: 100%;
+    background: linear-gradient(90deg, var(--orange), var(--peach));
+    transition: width 0.6s cubic-bezier(.34,1.56,.64,1);
+    border-radius: 0 20px 20px 0;
   }
   .stats-row {
     display: flex;
@@ -304,11 +310,34 @@
     background: var(--green);
     border-radius: 4px 0 0 4px;
   }
+  .activity-card.optional-card {
+    border-style: dashed;
+    border-color: #b3d9f7;
+    background: #f8fcff;
+    box-shadow: none;
+  }
+  .activity-card.optional-card.completed {
+    border-style: solid;
+    border-color: var(--orange);
+    background: #fff8f0;
+  }
+  .activity-card.optional-card.completed::before {
+    background: var(--orange);
+  }
   .activity-card.rest-card {
     background: #f0f7ff;
     border-style: dashed;
     box-shadow: none;
   }
+  .day-dot.ride-dot    { background: #bbdefb; color: #0d47a1; }
+  .day-dot.climb-dot   { background: #c8e6c9; color: #1b5e20; }
+  .day-dot.lobo-dot    { background: #fff9c4; color: #f57f17; }
+  .day-dot.pilates-dot { background: #f3e5f5; color: #6a1b9a; }
+  .day-dot.rest-dot    { background: #e3f2fd; color: #1565c0; }
+  .day-dot.event-dot   { background: var(--coral); color: white; }
+  .day-dot.sat-dot     { background: #fce4ec; color: #880e4f; }
+  .day-dot.sun-dot     { background: #fff3e0; color: #bf360c; }
+  .day-dot .day-name { font-size: 14px; font-weight: 900; font-family: 'Fraunces', serif; line-height: 1; margin-bottom: 1px; }
   .card-top {
     display: flex;
     align-items: flex-start;
@@ -328,13 +357,6 @@
     letter-spacing: 0.5px;
     text-transform: uppercase;
   }
-  .day-dot.ride-dot { background: #bbdefb; color: #0d47a1; }
-  .day-dot.climb-dot { background: #c8e6c9; color: #1b5e20; }
-  .day-dot.lobo-dot { background: #fff9c4; color: #f57f17; }
-  .day-dot.pilates-dot { background: #f3e5f5; color: #6a1b9a; }
-  .day-dot.rest-dot { background: #e3f2fd; color: #1565c0; }
-  .day-dot.event-dot { background: var(--coral); color: white; }
-  .day-dot .day-name { font-size: 14px; font-weight: 900; font-family: 'Fraunces', serif; line-height: 1; margin-bottom: 1px; }
   .card-content { flex: 1; min-width: 0; }
   .act-name {
     font-size: 14px;
@@ -364,6 +386,35 @@
   .badge-pilates { background: #f3e5f5; color: #6a1b9a; }
   .badge-rest { background: #e3f2fd; color: #1565c0; }
   .badge-event { background: #fce4ec; color: #880e4f; }
+  .badge-extra { background: #fff3e0; color: #e65100; }
+  .optional-pill {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 20px;
+    background: #e3f2fd;
+    color: #1565c0;
+    border: 1px dashed #90caf9;
+    margin-left: 6px;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+    vertical-align: middle;
+  }
+  .extra-pill {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 20px;
+    background: #fff3e0;
+    color: #e65100;
+    border: 1px solid #ffcc80;
+    margin-left: 6px;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+    vertical-align: middle;
+  }
 
   .route-link {
     display: inline-flex;
@@ -598,10 +649,14 @@
     <span>Overall Progress</span>
     <span id="progressPct">0%</span>
   </div>
-  <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+  <div class="progress-bar">
+    <div class="progress-fill" id="progressFill" style="width:0%"></div>
+    <div class="progress-extra" id="progressExtra" style="width:0%"></div>
+  </div>
   <div class="stats-row">
     <div class="stat-chip"><span class="val" id="statDone">0</span><span class="lbl">completed</span></div>
     <div class="stat-chip"><span class="val" id="statTotal">0</span><span class="lbl">total sessions</span></div>
+    <div class="stat-chip"><span class="val" id="statExtra">0</span><span class="lbl">🌟 bonus</span></div>
     <div class="stat-chip"><span class="val" id="statWeeks">0</span><span class="lbl">weeks done</span></div>
     <div class="stat-chip"><span class="val" id="statStreak">0</span><span class="lbl">days to go</span></div>
   </div>
@@ -612,9 +667,11 @@
 
 <div class="footer">
   Cashew thinks you should rest more. Cashew is wrong. 🐾<br><br>
-  <a href="https://ridewithgps.com/routes/50960507" target="_blank">🗺️ View the 68-Mile Event Route</a>
+  <a href="https://ridewithgps.com/routes/50960507" target="_blank">🗺️ 68-mi Event Route</a>
   &nbsp;&nbsp;·&nbsp;&nbsp;
-  <a href="https://act.alz.org/site/SPageServer?pagename=ride_homepage" target="_blank">💜 Ride to End ALZ Event Page</a>
+  <a href="https://act.alz.org/site/SPageServer?pagename=ride_homepage" target="_blank">💜 Ride to End ALZ</a>
+  &nbsp;&nbsp;·&nbsp;&nbsp;
+  <a href="https://act.alz.org/site/SPageServer?pagename=ridepc&pc2_page=center&fr_id=19316" target="_blank">🎗️ My Fundraising Page</a>
 </div>
 
 <script>
@@ -652,7 +709,10 @@ const weeks = [
       { id:"w1_fri", day:"Fri", type:"ride", act:"St. Vrain + Left Hand Greenway loop",
         meta:"14 mi · ~200 ft · ~1 hr 10 min · Start at Golden Ponds (3rd Ave & Airport Rd). Head east on the St. Vrain Greenway all the way to Sandstone Ranch. Return west on the Left Hand Greenway back to start. Flat, paved, zero traffic.",
         route:"https://www.traillink.com/trail/st-vrain-greenway/" },
+      { id:"w1_fri_pilates", day:"Fri", type:"pilates", act:"Optional Friday pilates", meta:"If your studio has a Friday class — bonus session! Great active recovery.", optional:true },
       { id:"w1_sat", day:"Sat", type:"rest", act:"Rest" },
+      { id:"w1_bonus", day:"Sat", type:"ride", act:"Optional bonus short ride", meta:"20–30 min easy spin anytime this week · St. Vrain Greenway or McIntosh Lake loop. No pressure, pure bonus.", optional:true, route:"https://www.traillink.com/trail/st-vrain-greenway/" },
+      { id:"w1_sun_pilates", day:"Sun", type:"pilates", act:"Pilates 12:30pm" },
       { id:"w1_sun", day:"Sun", type:"ride", act:"Easy spin before pilates",
         meta:"10 mi · ~100 ft · ~45 min · McIntosh Lake loop (3.5 mi paved loop off Hover St) then Golden Ponds out-and-back to fill time. Home by 11:30am.",
         route:"https://www.alltrails.com/trail/us/colorado/mcintosh-lake-trail" },
@@ -673,7 +733,10 @@ const weeks = [
       { id:"w2_fri", day:"Fri", type:"ride", act:"Dry Creek + Left Hand + LoBo out-and-back",
         meta:"18 mi · ~300 ft · ~1 hr 30 min · From your neighborhood, head west on the Dry Creek Greenway (picks up near 75th St/Pike Rd). Follow it south to the Left Hand Greenway, then west to the LoBo trailhead at Hover Rd. Go a few miles out on LoBo and retrace. Mostly paved greenway.",
         route:"https://walkrideusa.com/states/colorado/longmont-colorado" },
+      { id:"w2_fri_pilates", day:"Fri", type:"pilates", act:"Optional Friday pilates", meta:"If your studio has a Friday class — grab it! Rest of Friday is a training ride, so this would be a double day.", optional:true },
       { id:"w2_sat", day:"Sat", type:"rest", act:"Rest" },
+      { id:"w2_bonus", day:"Sat", type:"ride", act:"Optional bonus short ride", meta:"20–30 min easy spin anytime this week · Any flat greenway. Pure bonus miles.", optional:true, route:"https://www.traillink.com/trail/st-vrain-greenway/" },
+      { id:"w2_sun_pilates", day:"Sun", type:"pilates", act:"Pilates 12:30pm" },
       { id:"w2_sun", day:"Sun", type:"ride", act:"St. Vrain end-to-end before pilates",
         meta:"16 mi · ~265 ft · ~1 hr 20 min · Golden Ponds → Sandstone Ranch and back on the St. Vrain Greenway. Home by 11:30am.",
         route:"https://www.traillink.com/trail/st-vrain-greenway/" },
@@ -694,7 +757,10 @@ const weeks = [
       { id:"w3_fri", day:"Fri", type:"ride", act:"Longmont → Niwot → Boulder Reservoir → back",
         meta:"28 mi · ~500 ft · ~2 hrs · Left Hand Greenway west to LoBo trailhead (Hover Rd). South on LoBo through Niwot (~5 mi of rolling gravel). At Twin Lakes Rd, hop onto 63rd St south then east on Niwot Rd to the Boulder Reservoir. Return same way. First taste of sustained hills.",
         route:"https://ridewithgps.com/routes/35042732" },
+      { id:"w3_fri_pilates", day:"Fri", type:"pilates", act:"Optional Friday pilates", meta:"After a long Friday ride this is a real double day — skip if tired, take it if you feel good.", optional:true },
       { id:"w3_sat", day:"Sat", type:"rest", act:"Rest" },
+      { id:"w3_bonus", day:"Sat", type:"ride", act:"Optional bonus short ride", meta:"20–30 min easy spin anytime this week · Keep it very easy, just extra saddle time.", optional:true, route:"https://www.traillink.com/trail/st-vrain-greenway/" },
+      { id:"w3_sun_pilates", day:"Sun", type:"pilates", act:"Pilates 12:30pm" },
       { id:"w3_sun", day:"Sun", type:"ride", act:"Easy recovery spin before pilates",
         meta:"12 mi · ~150 ft · ~55 min · Golden Ponds loop, flat and easy. Let the legs recover.",
         route:"https://www.traillink.com/trail/st-vrain-greenway/" },
@@ -715,7 +781,10 @@ const weeks = [
       { id:"w4_fri", day:"Fri", type:"ride", act:"Longmont → Lyons and back via Hwy 36",
         meta:"28 mi · ~600 ft · ~2 hrs · From downtown Longmont, head west on Ken Pratt Blvd to Hwy 36 North. Follow Hwy 36 ~14 mi to Lyons (wide shoulder, scenic foothills). Stop in Lyons at Oskar Blues or in town, then retrace. Gently rolling with a longer push approaching Lyons.",
         route:"https://ridewithgps.com/routes/27201481" },
+      { id:"w4_fri_pilates", day:"Fri", type:"pilates", act:"Optional Friday pilates", meta:"After the Lyons ride, pilates is great for the hips and lower back. Only if you feel up to it.", optional:true },
       { id:"w4_sat", day:"Sat", type:"rest", act:"Rest" },
+      { id:"w4_bonus", day:"Sat", type:"ride", act:"Optional bonus short ride", meta:"20–30 min easy spin anytime this week · Flat greenway only, easy pace.", optional:true, route:"https://www.traillink.com/trail/st-vrain-greenway/" },
+      { id:"w4_sun_pilates", day:"Sun", type:"pilates", act:"Pilates 12:30pm" },
       { id:"w4_sun", day:"Sun", type:"ride", act:"Easy 60 min spin before pilates",
         meta:"14 mi · ~150 ft · ~1 hr · St. Vrain Greenway flat out-and-back. Very easy active recovery.",
         route:"https://www.traillink.com/trail/st-vrain-greenway/" },
@@ -736,9 +805,11 @@ const weeks = [
       { id:"w5_fri", day:"Fri", type:"climb", act:"Longmont → Left Hand Canyon → Jamestown and back",
         meta:"39 mi · ~2,200 ft · ~3 hrs 15 min · From Longmont, west on Ken Pratt Blvd to Hwy 36 North. At the Greenbriar Inn (~6 mi), turn left onto Left Hand Canyon Dr (paved, wide shoulder). Follow canyon ~8 mi to the James Canyon Dr junction, then 3 mi up to Jamestown. Stop at the Jamestown Mercantile. Return down same way — descent is fast, brake early on corners.",
         route:"https://ridewithgps.com/routes/566276" },
+      { id:"w5_fri_pilates", day:"Fri", type:"pilates", act:"Optional Friday pilates", meta:"After Jamestown this is truly optional — only if your legs feel surprisingly okay.", optional:true },
       { id:"w5_sat", day:"Sat", type:"ride", act:"Active recovery — flat trail spin",
         meta:"20 mi · ~250 ft · ~1 hr 40 min · St. Vrain Greenway and Left Hand Greenway, easy pace only. Blood flow, not training.",
         route:"https://www.traillink.com/trail/st-vrain-greenway/" },
+      { id:"w5_bonus", day:"Sat", type:"ride", act:"Optional bonus short ride", meta:"10–15 min extra spin after the recovery ride · literally just a cool-down lap around the block. Only if you want.", optional:true },
       { id:"w5_sun", day:"Sun", type:"pilates", act:"Pilates 12:30pm — no ride",
         meta:"Let legs recover from the canyon climb." },
     ]
@@ -758,7 +829,10 @@ const weeks = [
       { id:"w6_fri", day:"Fri", type:"climb", act:"Longmont → Left Hand Canyon → Jamestown and back",
         meta:"39 mi · ~2,200 ft · ~3 hrs · Same route as Week 5: Ken Pratt → Hwy 36 → Left Hand Canyon Dr → James Canyon Dr → Jamestown Mercantile. Aim to feel stronger and more relaxed than last time.",
         route:"https://ridewithgps.com/routes/566276" },
+      { id:"w6_fri_pilates", day:"Fri", type:"pilates", act:"Optional Friday pilates", meta:"Second Jamestown week — same as Week 5, only if legs are willing.", optional:true },
       { id:"w6_sat", day:"Sat", type:"rest", act:"Rest" },
+      { id:"w6_bonus", day:"Sat", type:"ride", act:"Optional bonus short ride", meta:"20–30 min easy spin · pure bonus. You just did Jamestown twice.", optional:true, route:"https://www.traillink.com/trail/st-vrain-greenway/" },
+      { id:"w6_sun_pilates", day:"Sun", type:"pilates", act:"Pilates 12:30pm" },
       { id:"w6_sun", day:"Sun", type:"ride", act:"Easy trail spin before pilates",
         meta:"14 mi · ~180 ft · ~1 hr 10 min · St. Vrain Greenway flat, easy pace only.",
         route:"https://www.traillink.com/trail/st-vrain-greenway/" },
@@ -779,7 +853,10 @@ const weeks = [
       { id:"w7_fri", day:"Fri", type:"ride", act:"Niwot loop via LoBo — solid effort, shorter day",
         meta:"30 mi · ~700 ft · ~2 hrs 20 min · Left Hand Greenway to LoBo trailhead. South on LoBo through Niwot. At Twin Lakes, loop east to 63rd St, north on Niwot Rd, Boulder Reservoir area, then retrace LoBo north back to Longmont. Ride it at a confident effort, not a crawl.",
         route:"https://ridewithgps.com/routes/35042732" },
+      { id:"w7_fri_pilates", day:"Fri", type:"pilates", act:"Optional Friday pilates", meta:"Taper week — pilates is perfect right now. Low impact, keeps you moving, great for the mind.", optional:true },
       { id:"w7_sat", day:"Sat", type:"rest", act:"Rest" },
+      { id:"w7_bonus", day:"Sat", type:"ride", act:"Optional bonus short ride", meta:"15–20 min easy spin · taper week so keep it very short. Just keeping the legs awake.", optional:true, route:"https://www.traillink.com/trail/st-vrain-greenway/" },
+      { id:"w7_sun_pilates", day:"Sun", type:"pilates", act:"Pilates 12:30pm" },
       { id:"w7_sun", day:"Sun", type:"ride", act:"Easy spin before pilates",
         meta:"12 mi · ~150 ft · ~55 min · St. Vrain Greenway flat, easy pace. Home by 11:30am.",
         route:"https://www.traillink.com/trail/st-vrain-greenway/" },
@@ -802,6 +879,7 @@ const weeks = [
         meta:"Charge lights, check tire pressure, pack food + kit the night before." },
       { id:"w8_fri", day:"Fri", type:"rest", act:"Drive to Fort Collins",
         meta:"Stay over Friday night — 7:15am start means you don't want to be driving at 5am from Longmont." },
+      { id:"w8_bonus", day:"Sat", type:"ride", act:"Optional bonus short spin in Fort Collins", meta:"15 min easy spin to loosen up if you feel like it · just spin the legs, no effort. Fort Collins has great bike paths.", optional:true },
       { id:"w8_sat", day:"Sat", type:"rest", act:"Rest · explore Fort Collins · early bed",
         meta:"Carb-load at dinner. In bed by 9:30." },
       { id:"w8_sun", day:"Sun Jun 6", type:"event", act:"🎉 RIDE DAY — Ride to End ALZ",
@@ -840,47 +918,53 @@ const TYPE_COLORS = {
 };
 const TYPE_BADGES = {
   ride: 'badge-ride', climb: 'badge-climb', lobo: 'badge-lobo',
-  pilates: 'badge-pilates', rest: 'badge-rest', event: 'badge-event'
+  pilates: 'badge-pilates', rest: 'badge-rest', event: 'badge-event',
+  extra: 'badge-extra'
 };
 const TYPE_LABELS = {
-  ride: 'Ride', climb: 'Climb', lobo: 'LoBo', pilates: 'Pilates', rest: 'Rest', event: '🎉 Event'
+  ride: 'Ride', climb: 'Climb', lobo: 'LoBo', pilates: 'Pilates',
+  rest: 'Rest', event: '🎉 Event', extra: 'Bonus Ride'
 };
 
-function isTrackable(type) {
-  return type !== 'rest';
-}
+function isTrackable(type) { return type !== 'rest'; }
+function isOptional(d) { return !!d.optional; }
 
 function updateStats() {
-  let total = 0, done = 0;
+  let total = 0, done = 0, extra = 0;
   weeks.forEach(w => {
     w.days.forEach(d => {
-      if (isTrackable(d.type)) {
+      if (d.type === 'rest') return;
+      if (isOptional(d)) {
+        if (state[d.id]?.done) extra++;
+      } else {
         total++;
         if (state[d.id]?.done) done++;
       }
     });
   });
-  const pct = total > 0 ? Math.round((done/total)*100) : 0;
+  const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+  const extraWidth = total > 0 ? Math.min(10, Math.round((extra / total) * 100)) : 0;
   document.getElementById('progressFill').style.width = pct + '%';
-  document.getElementById('progressPct').textContent = pct + '%';
+  document.getElementById('progressExtra').style.width = (pct + extraWidth <= 100 ? extraWidth : 100 - pct) + '%';
+  document.getElementById('progressPct').textContent = pct + '%' + (extra > 0 ? ` +${extra} bonus` : '');
   document.getElementById('statDone').textContent = done;
   document.getElementById('statTotal').textContent = total;
+  document.getElementById('statExtra').textContent = extra;
 
   const completedWeeks = weeks.filter(w =>
-    w.days.every(d => !isTrackable(d.type) || state[d.id]?.done)
+    w.days.every(d => d.type === 'rest' || isOptional(d) || state[d.id]?.done)
   ).length;
   document.getElementById('statWeeks').textContent = completedWeeks;
 
   const today = new Date();
   const event = new Date('2026-06-06');
-  const diff = Math.max(0, Math.ceil((event - today) / (1000*60*60*24)));
+  const diff = Math.max(0, Math.ceil((event - today) / (1000 * 60 * 60 * 24)));
   document.getElementById('statStreak').textContent = diff;
 
-  // Update week tab badges
   weeks.forEach(w => {
     const tab = document.getElementById('tab-' + w.id);
     if (!tab) return;
-    const allDone = w.days.every(d => !isTrackable(d.type) || state[d.id]?.done);
+    const allDone = w.days.every(d => d.type === 'rest' || isOptional(d) || state[d.id]?.done);
     tab.classList.toggle('done-badge', allDone);
   });
 }
@@ -905,7 +989,7 @@ function toggleDone(id, type) {
 
   updateStats();
 
-  if (state[id].done && isTrackable(type) && type !== 'rest') {
+  if (state[id].done && isTrackable(type)) {
     setTimeout(() => showCelebrate(type), 200);
   }
 }
@@ -932,7 +1016,7 @@ function saveNote(id) {
   saved.style.display = 'block';
   setTimeout(() => saved.style.display = 'none', 1500);
   if (preview) {
-    preview.textContent = ta.value ? '📝 ' + ta.value.slice(0,80) + (ta.value.length > 80 ? '...' : '') : '';
+    preview.textContent = ta.value ? '📝 ' + ta.value.slice(0, 80) + (ta.value.length > 80 ? '...' : '') : '';
     preview.style.display = ta.value ? 'block' : 'none';
   }
 }
@@ -950,7 +1034,6 @@ function buildUI() {
   const cardsEl = document.getElementById('weekCards');
 
   weeks.forEach((w, wi) => {
-    // Tab
     const tab = document.createElement('button');
     tab.className = 'week-tab' + (wi === 0 ? ' active' : '') + (w.isEvent ? ' event-tab' : '');
     tab.id = 'tab-' + w.id;
@@ -963,7 +1046,6 @@ function buildUI() {
     };
     tabsEl.appendChild(tab);
 
-    // Card
     const wc = document.createElement('div');
     wc.className = 'week-card' + (wi === 0 ? ' visible' : '');
     wc.id = 'weekcard-' + w.id;
@@ -992,31 +1074,32 @@ function buildUI() {
     w.days.forEach(d => {
       const isDone = state[d.id]?.done || false;
       const savedNote = state[d.id]?.note || '';
-      const trackable = isTrackable(d.type);
-      const dotClass = TYPE_COLORS[d.type] || 'rest-dot';
-      const badgeClass = TYPE_BADGES[d.type] || 'badge-rest';
-      const typeLabel = TYPE_LABELS[d.type] || d.type;
+      const optional = isOptional(d);
+      const dotClass = d.day.startsWith('Sat') ? 'sat-dot' : d.day.startsWith('Sun') ? 'sun-dot' : (TYPE_COLORS[d.type] || 'rest-dot');
+      const badgeClass = optional ? 'badge-extra' : (TYPE_BADGES[d.type] || 'badge-rest');
+      const typeLabel = optional ? '⭐ Optional' : (TYPE_LABELS[d.type] || d.type);
       const isRestCard = d.type === 'rest';
 
-      inner += `<div class="activity-card ${isDone ? 'completed' : ''} ${isRestCard ? 'rest-card' : ''}" id="card-${d.id}">
+      inner += `<div class="activity-card ${isDone ? 'completed' : ''} ${isRestCard ? 'rest-card' : ''} ${optional ? 'optional-card' : ''}" id="card-${d.id}">
         <div class="card-top">
           <div class="day-dot ${dotClass}">
             <span class="day-name">${d.day.split(' ')[0]}</span>
-            <span>${typeLabel}</span>
+            <span>${TYPE_LABELS[d.type] || d.type}</span>
           </div>
           <div class="card-content">
             <span class="type-badge ${badgeClass}">${typeLabel}</span>
+            ${optional ? '<span class="extra-pill">+extra credit</span>' : ''}
             <div class="act-name">${d.act}</div>
             ${d.meta ? `<div class="act-meta">${d.meta}</div>` : ''}
             ${d.route ? `<a class="route-link" href="${d.route}" target="_blank">🗺️ View Route</a>` : ''}
           </div>
         </div>`;
 
-      if (trackable) {
+      if (d.type !== 'rest') {
         inner += `<div class="check-row">
           <label class="check-label ${isDone ? 'checked' : ''}" onclick="toggleDone('${d.id}','${d.type}'); return false;">
             <div class="custom-check ${isDone ? 'checked' : ''}">${isDone ? '✓' : ''}</div>
-            ${isDone ? ' Completed!' : ' Mark as done'}
+            ${isDone ? (optional ? ' Bonus earned! 🌟' : ' Completed!') : (optional ? ' Did this too!' : ' Mark as done')}
           </label>
           <button class="notes-toggle" onclick="toggleNotes('${d.id}')">📝 Notes</button>
         </div>
@@ -1024,7 +1107,6 @@ function buildUI() {
           <textarea class="notes-input" id="notes-${d.id}" placeholder="How did it feel? Any notes..." oninput="saveNote('${d.id}')">${savedNote}</textarea>
           <div class="notes-saved" id="saved-${d.id}" style="display:none">✓ Saved</div>
         </div>
-        ${savedNote && !savedNote ? '' : ''}
         ${savedNote ? `<div class="notes-preview" id="preview-${d.id}">📝 ${savedNote.slice(0,80)}${savedNote.length>80?'...':''}</div>` : `<div class="notes-preview" id="preview-${d.id}" style="display:none"></div>`}
         `;
       }
